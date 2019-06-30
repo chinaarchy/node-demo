@@ -15,7 +15,14 @@ const sequelize = new Sequelize(dbName, user, password,{
     timezone: '+08:00',
     define:{
         underscored: true,
-        freezeTableName:true
+        freezeTableName:true,
+        scopes:{
+            bh:{
+                attributes:{
+                   exclude:['updated_at','deleted_at','created_at']
+                }
+            }
+        }
     }
 })
 
