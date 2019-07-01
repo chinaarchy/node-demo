@@ -3,6 +3,24 @@ const {Op} = require('sequelize');
 const {flatten} = require('lodash');
 
 class Art {
+    constructor(art_id, type){
+        this.art_id = art_id
+        this.type = type
+    }
+
+    async getDetail(uid){
+        const {Favor} = require('./favor');
+        const art = await Art.getData(this.art_id, this.type);
+        if(!art){
+            throw new global.errs.NotFound()
+        }
+        const like = await Favor.userLikeIt(this.art_id, this.type, uid);
+        return {
+            art,
+            like_status: like
+        }
+    }
+
     static async getData(art_id, type, useScope=true){
         const finder = {
             where: {
@@ -19,14 +37,6 @@ class Art {
             default:break;
         }
         return result;
-    }
-
-    static async getArt(flow, uid){
-        const art = await Art.getData(flow.artId, flow.type);
-        const likePrev = await Favor.userLikeIt(flow.artId, flow.type, uid);
-        art.setDataValue('index', flow.index);
-        art.setDataValue('like_status', likePrev);
-        return art
     }
 
     static async getList(artInfoList){
@@ -47,11 +57,11 @@ class Art {
             key = parseInt(key);
             arts.push(await Art._getListByType(ids, key))
         }
-        return arts
+        return flatten(arts)
     }
 
     static async _getListByType(ids, type){
-        let result = []
+        let result = [];
         const finder = {
             where: {
                 id: {
@@ -59,7 +69,7 @@ class Art {
                 }
             }
         };
-        const scope = 'bh'
+        const scope = 'bh';
         switch (type) {
             case 100:result = await Movie.scope(scope).findOne(finder);break;
             case 200:result = await Music.scope(scope).findOne(finder);break;
@@ -67,7 +77,7 @@ class Art {
             case 400:break;
             default:break;
         }
-        return flatten(result);
+        return result;
     }
 }
 
