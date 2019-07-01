@@ -30,9 +30,7 @@ Sentence.init(classicFields,{
 class Music extends Model{
 
 }
-Music.init(Object.assign({url:Sequelize.STRING}, classicFields),
-    {sequelize, tableName: 'music'}
-    );
+Music.init(Object.assign({url:Sequelize.STRING}, classicFields), {sequelize, tableName: 'music'});
 
 module.exports = {
     Movie,
