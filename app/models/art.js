@@ -1,4 +1,5 @@
 const {Movie, Music, Sentence} = require('./classic');
+const {HotBook} = require('./hot_book');
 const {Op} = require('sequelize');
 const {flatten} = require('lodash');
 
