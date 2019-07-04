@@ -1,6 +1,6 @@
-const {sequelize} = require('../../core/db')
-const {Sequelize, Model, Op} = require('sequelize')
-const {Art} = require('./art')
+const {sequelize} = require('../../core/db');
+const {Sequelize, Model, Op} = require('sequelize');
+const {Art} = require('./art');
 
 class Favor extends Model {
     // 业务表
@@ -48,7 +48,7 @@ class Favor extends Model {
                 force: true,
                 transaction: t
             });
-            const art = await Art.getData(art_id, type, false)
+            const art = await Art.getData(art_id, type, false);
             await art.decrement('fav_nums', {
                 by: 1,
                 transaction: t
@@ -63,7 +63,7 @@ class Favor extends Model {
                 art_id,
                 type,
             }
-        })
+        });
         return !!favor
     }
 
@@ -82,6 +82,25 @@ class Favor extends Model {
         return await Art.getList(arts)
     }
 
+    static async getBookFavors(uid, bookID) {
+        const fav_nums = await Favor.count({
+            where:{
+                art_id: bookID,
+                type: 400
+            }
+        });
+        const myFavor = await Favor.count({
+            where: {
+                art_id: bookID,
+                uid,
+                type: 400
+            }
+        });
+        return {
+            fav_nums,
+            like_status: myFavor?1:0
+        }
+    }
 }
 
 Favor.init({
@@ -91,8 +110,8 @@ Favor.init({
 }, {
     sequelize,
     tableName: 'favor'
-})
+});
 
 module.exports = {
     Favor
-}
+};
