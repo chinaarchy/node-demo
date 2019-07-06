@@ -29,6 +29,13 @@ class BookComment extends Model{
             }
         })
     }
+
+    toJSON() {
+        return {
+            content: this.getDataValue('content'),
+            nums: this.getDataValue('nums')
+        }
+    }
 }
 
 BookComment.init({

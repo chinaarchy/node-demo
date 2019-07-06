@@ -1,11 +1,11 @@
-const Sequelize = require('sequelize')
+const Sequelize = require('sequelize');
 const {
     dbName,
     host,
     port,
     user,
     password
-} = require('../config/config').database
+} = require('../config/config').database;
 
 const sequelize = new Sequelize(dbName, user, password,{
     dialect:'mysql',
@@ -24,10 +24,10 @@ const sequelize = new Sequelize(dbName, user, password,{
             }
         }
     }
-})
+});
 
-sequelize.sync()
+sequelize.sync();
 
 module.exports = {
     sequelize
-}
+};

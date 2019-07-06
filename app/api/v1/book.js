@@ -10,11 +10,11 @@ const {Book} = require('../../models/book');
 const {Favor} = require('../../models/favor');
 const {BookComment} = require('../../models/book_comment');
 
-router.get('/hot_list', new Auth().m ,async (ctx, next) =>{
+router.get('/hot_list',async (ctx, next) =>{
     ctx.body = await HotBook.getAll();
 });
 
-router.get('/:id/detail', new Auth().m, async (ctx, next) => {
+router.get('/:id/detail', async (ctx, next) => {
     const v = await new PositiveIntegerValidator().validate(ctx);
     ctx.body = await Book.getDetail(v.get('path.id'))
 });
@@ -28,12 +28,12 @@ router.get('/favor/count', new Auth().m, async (ctx, next) => {
    ctx.body = await Book.getMyfavorBookCount(ctx.auth.uid)
 });
 
-router.get('/:book_id/favor', new Auth().m, async (ctx,next) => {
+router.get('/:book_id/favor',new Auth().m, async (ctx,next) => {
     const v = await new PositiveIntegerValidator().validate(ctx, {id: 'book_id'});
     ctx.body = await Favor.getBookFavors(ctx.auth.uid, v.get('path.book_id'))
 });
 
-router.post('/add/short_comment', new Auth().m, async (ctx, next) => {
+router.post('/add/short_comment', async (ctx, next) => {
     const v = await new AddShortCommentValidator().validate(ctx, {
         id: 'book_id'
     });
@@ -41,7 +41,7 @@ router.post('/add/short_comment', new Auth().m, async (ctx, next) => {
     throw new global.errs.Success()
 });
 
-router.get(':book_id/short_comment', new Auth().m, async (ctx, next) => {
+router.get('/:book_id/short_comment', async (ctx, next) => {
     const v = await new PositiveIntegerValidator().validate(ctx,{id: 'book_id'});
     const book_id = v.get('path.book_id');
     const comments = await BookComment.getComments(book_id);

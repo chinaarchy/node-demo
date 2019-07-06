@@ -34,7 +34,12 @@ class Art {
             case 100:result = await Movie.scope(scope).findOne(finder);break;
             case 200:result = await Music.scope(scope).findOne(finder);break;
             case 300:result = await Sentence.scope(scope).findOne(finder);break;
-            case 400:break;
+            case 400:const {Book} = require('./book');
+                result = await Book.scope(scope).findAll(finder);
+                if (!result){
+                    result = await Book.create({id: art_id})
+                }
+                break;
             default:break;
         }
         return result;
